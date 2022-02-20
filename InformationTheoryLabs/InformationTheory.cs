@@ -11,7 +11,7 @@ namespace InformationTheoryLabs
     {
         private enum Alphabet { English, Russian};
         private enum Cipher { ColumnarTransposition, Vigenere, DownsamplingMethod};
-        private enum ErrorCode { NoErrors, UnknowLanguage};
+        private enum ErrorCode { NoErrors, UnknownLanguage, UnknownAlgorithm};
 
         // Contains last error.
         private ErrorCode lastError = ErrorCode.NoErrors;
@@ -55,18 +55,25 @@ namespace InformationTheoryLabs
         /// </summary>
         private void showError()
         {
-            switch(lastError)
+            string stringError = "";
+            switch (lastError)
             {
                 case ErrorCode.NoErrors:
+                    stringError = "Нет ошибок";
                     break;
 
-                case ErrorCode.UnknowLanguage:
-                    MessageBox.Show("Выберете язык", "Ошибка",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    lastError = ErrorCode.NoErrors;
+                case ErrorCode.UnknownLanguage:
+                    stringError = "Выберете язык";
+                    break;
+
+                case ErrorCode.UnknownAlgorithm:
+                    stringError = "Выберете алгоритм шифрования";
                     break;
             }
 
+            lastError = ErrorCode.NoErrors;
+            MessageBox.Show(stringError, "Ошибка",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         /// <summary>
@@ -80,6 +87,10 @@ namespace InformationTheoryLabs
                 lastError = ErrorCode.UnknowLanguage;
                 return false; 
             } 
+            if (cbCipher.SelectedIndex == -1)
+            {
+                return false;
+            }
 
             return true;
         }
