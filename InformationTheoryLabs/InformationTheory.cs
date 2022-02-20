@@ -84,13 +84,15 @@ namespace InformationTheoryLabs
         {
             if (cbLanguage.SelectedIndex == -1)
             {
-                lastError = ErrorCode.UnknowLanguage;
+                lastError = ErrorCode.UnknownLanguage;
                 return false; 
             } 
             if (cbCipher.SelectedIndex == -1)
             {
+                lastError = ErrorCode.UnknownAlgorithm;
                 return false;
             }
+            
 
             return true;
         }
@@ -121,6 +123,8 @@ namespace InformationTheoryLabs
         /// <returns>Returns cipher text</returns>
         private string codeByСolumnMethod(string plaintext, string key)
         {
+            if (key == "") key = " ";
+
             string ciphertext = "";
 
             List<int> notValidLetters = new List<int>(); 
@@ -158,10 +162,11 @@ namespace InformationTheoryLabs
         private int findNextLetterPos(string word)
         {
             char currLetter = this.firstAlphabetLetter;
+            int pos;
 
             while (currLetter <= lastAlphabetLetter)
             {
-                int pos = word.IndexOf(currLetter);
+                pos = word.IndexOf(currLetter);
 
                 if (pos != -1)
                 {                   
@@ -171,7 +176,15 @@ namespace InformationTheoryLabs
                 currLetter++;
             }
 
-            return currLetter;
+            // Return last not zero symbol.
+            pos = 0;
+            while (pos < word.Length && word[pos] == (char)0)
+                pos++;
+
+            if (pos >= word.Length)
+                return pos--;
+            else
+                return pos;
         }
 
         /// <summary>
