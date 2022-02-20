@@ -9,9 +9,12 @@ namespace InformationTheoryLabs
 {
     public partial class fInformationTheory : Form
     {
-        private enum Alphabet { alEnglish, alRussian};
-        private enum Cipher { cpColumnarTransposition, cpVigenere, cpDownsamplingMethod};
+        private enum Alphabet { English, Russian};
+        private enum Cipher { ColumnarTransposition, Vigenere, DownsamplingMethod};
+        private enum ErrorCode { NoErrors, UnknowLanguage};
 
+        // Contains last error.
+        private ErrorCode lastError = ErrorCode.NoErrors;
 
         private char firstAlphabetLetter = 'A';
         private char lastAlphabetLetter = 'Z';
@@ -33,11 +36,52 @@ namespace InformationTheoryLabs
 
         private void btnCode_Click(object sender, EventArgs e)
         {
+            if (!isCorrectInput())
+            {
+                showError();
+                return;
+            }
+
             setUpAlphabet((Alphabet)cbLanguage.SelectedIndex);
             string ciphertext = codeByСolumnMethod(tbPlaitext.Text, tbKey.Text.ToUpper());
 
             tpCiphertext.Text = ciphertext;
 
+        }
+
+        /// <summary>
+        /// Creates error message.
+        /// <para>Error code contains in variable lastError.</para>
+        /// </summary>
+        private void showError()
+        {
+            switch(lastError)
+            {
+                case ErrorCode.NoErrors:
+                    break;
+
+                case ErrorCode.UnknowLanguage:
+                    MessageBox.Show("Выберете язык", "Ошибка",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    lastError = ErrorCode.NoErrors;
+                    break;
+            }
+
+        }
+
+        /// <summary>
+        /// Checks all fields in program
+        /// </summary>
+        /// <returns>Returns true if all correct</returns>
+        private bool isCorrectInput()
+        {
+            if (cbLanguage.SelectedIndex == -1)
+            {
+                lastError = ErrorCode.UnknowLanguage;
+                return false; 
+            } 
+
+            return true;
         }
 
         /// <summary>
@@ -47,12 +91,12 @@ namespace InformationTheoryLabs
         {
             switch (alpabet)
             {
-                case Alphabet.alEnglish:
+                case Alphabet.English:
                     firstAlphabetLetter = 'A';
                     lastAlphabetLetter = 'Z';
                     break;
 
-                case Alphabet.alRussian:
+                case Alphabet.Russian:
                     firstAlphabetLetter = 'А';
                     lastAlphabetLetter = 'Я';
                     break;
