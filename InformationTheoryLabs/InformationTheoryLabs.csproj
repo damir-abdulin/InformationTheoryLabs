@@ -53,6 +53,7 @@
     <Compile Include="InformationTheory.Designer.cs">
       <DependentUpon>InformationTheory.cs</DependentUpon>
     </Compile>
+    <Compile Include="Language.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="InformationTheory.resx">

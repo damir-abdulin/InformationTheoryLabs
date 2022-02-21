@@ -8,14 +8,13 @@ namespace InformationTheoryLabs
 {
     internal class ColumnMethod
     {
-        private char firstAlphabetLetter, lastAlphabetLetter;
         private string key;
+        private Language language;
 
-        public ColumnMethod (string key, char firstLetter, char lastLetter)
+        public ColumnMethod (string key, Language language)
         {
-            this.firstAlphabetLetter = firstLetter;
-            this.lastAlphabetLetter = lastLetter;
             this.key = key;
+            this.language = language;
         }
         /// <summary>
         /// Code plain text uses column method.
@@ -33,12 +32,12 @@ namespace InformationTheoryLabs
 
             for (int i = 0; i < key.Length; i++)
             {
-                column = findNextLetterPos(key);
+                column = language.findNextLetterPos(key);
                 hideLetter(ref key, column);
 
                 for (int j = column; j < plaintext.Length; j += key.Length)
                 {
-                    if (isValidLetter(plaintext[j]))
+                    if (language.isValidLetter(plaintext[j]))
                         ciphertext += plaintext[j];
                     else
                         notValidLetters.Add(j);
@@ -54,38 +53,6 @@ namespace InformationTheoryLabs
             return ciphertext;
         }
 
-        /// <summary>
-        /// Finds position in word letter with minimal alphabet index
-        /// </summary>
-        /// <param name="word"></param>
-        /// <returns>Returns position in word</returns>
-        private int findNextLetterPos(string word)
-        {
-            char currLetter = firstAlphabetLetter;
-            int pos;
-
-            while (currLetter <= lastAlphabetLetter)
-            {
-                pos = word.IndexOf(currLetter);
-
-                if (pos != -1)
-                {
-                    return pos;
-                }
-
-                currLetter++;
-            }
-
-            // Return last not zero symbol.
-            pos = 0;
-            while (pos < word.Length && word[pos] == (char)0)
-                pos++;
-
-            if (pos >= word.Length)
-                return pos--;
-            else
-                return pos;
-        }
 
         /// <summary>
         /// Replace symbol in word[pos] with 0 symbol
@@ -99,15 +66,6 @@ namespace InformationTheoryLabs
             word = buff.ToString();
         }
 
-        /// <summary>
-        /// Checks symbol is valid or not.
-        /// </summary>
-        /// <param name="letter">is checked symbol</param>
-        /// <returns>Returns true if symbol is valid</returns>
-        private bool isValidLetter(char letter)
-        {
-            letter = Char.ToUpper(letter);
-            return (letter >= firstAlphabetLetter && letter <= lastAlphabetLetter);
-        }
+        
     }
 }

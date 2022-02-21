@@ -4,25 +4,26 @@ using System.Windows.Forms;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
-//using ColumnMethod;
 
 namespace InformationTheoryLabs
 {
     public partial class fInformationTheory : Form
     {
-        private enum Alphabet { English, Russian};
+        
         private enum Cipher { ColumnarTransposition, Vigenere, DownsamplingMethod};
         private enum ErrorCode { NoErrors, UnknownLanguage, UnknownAlgorithm};
 
         // Contains last error.
-        private ErrorCode lastError = ErrorCode.NoErrors;
+        private ErrorCode lastError;
 
-        private char firstAlphabetLetter = 'A';
-        private char lastAlphabetLetter = 'Z';
-
+        private Language currLang; 
         public fInformationTheory()
         {
             InitializeComponent();
+
+            // Initializes class fields.
+            currLang = new Language(Language.Alphabet.English);
+            lastError = ErrorCode.NoErrors;
 
             // Set up combo boxes.
             string[] alphabetEncodeTable = { "Английский", "Русский" };
@@ -31,7 +32,7 @@ namespace InformationTheoryLabs
             foreach (string cipher in cipherEncodeTable)
                 cbCipher.Items.Add(cipher);
 
-            foreach (string alphabet in alphabetEncodeTable)
+            foreach (string alphabet in currLang.AlphabetView)
                 cbLanguage.Items.Add(alphabet);
         }
 
@@ -44,10 +45,9 @@ namespace InformationTheoryLabs
             }
 
 
-            ColumnMethod columnMethod = new ColumnMethod(tbKey.Text.ToUpper(),
-                firstAlphabetLetter, lastAlphabetLetter);
+            ColumnMethod columnMethod = new ColumnMethod(tbKey.Text.ToUpper(), currLang);
 
-            setUpAlphabet((Alphabet)cbLanguage.SelectedIndex);
+            currLang.changeAlphabet((Language.Alphabet)cbLanguage.SelectedIndex);
             string ciphertext = columnMethod.encrypt(tbPlaitext.Text);
 
             tpCiphertext.Text = ciphertext;
@@ -102,25 +102,6 @@ namespace InformationTheoryLabs
             return true;
         }
 
-        /// <summary>
-        /// Changes fields firstAlphabetLetter and lastAlphabetLetter
-        /// </summary>
-        private void setUpAlphabet(Alphabet alpabet)
-        {
-            switch (alpabet)
-            {
-                case Alphabet.English:
-                    firstAlphabetLetter = 'A';
-                    lastAlphabetLetter = 'Z';
-                    break;
-
-                case Alphabet.Russian:
-                    firstAlphabetLetter = 'А';
-                    lastAlphabetLetter = 'Я';
-                    break;
-            }
-
-        }
 
     }
 }
