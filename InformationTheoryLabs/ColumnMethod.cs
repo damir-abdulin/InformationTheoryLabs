@@ -17,6 +17,8 @@ namespace InformationTheoryLabs
         {
             if (key == "") key = " ";
 
+            createMatrix(plaintext, key, lang);
+
             string ciphertext = "";
 
             List<int> notValidLetters = new List<int>();
@@ -70,6 +72,28 @@ namespace InformationTheoryLabs
             return true;
         }
 
-        
+        private static void createMatrix(string plaintext, string key, Language lang)
+        {
+            char[,] matrix = new char[plaintext.Length, key.Length];
+
+            int i = 0;
+            int j = 0;
+            int currLetter = 0;
+
+            while (currLetter <= plaintext.Length)
+            {
+                int column = lang.findNextLetterPos(key);
+                hideLetter(ref key, column);
+
+                for (j = 0; j <= column; j++)
+                {
+                    matrix[i, j] = plaintext[currLetter];
+                    currLetter++;
+                }
+
+                i++;
+            }
+
+        }
     }
 }
