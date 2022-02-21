@@ -17,33 +17,28 @@ namespace InformationTheoryLabs
         {
             if (key == "") key = " ";
 
-            createMatrix(plaintext, key, lang);
+            char[,] matrix = createMatrix(plaintext, key, lang);
+            int matrixRows = matrix.GetUpperBound(0) + 1;
+            int matrixColumns = matrix.Length / matrixRows;
 
             string ciphertext = "";
 
             List<int> notValidLetters = new List<int>();
 
-            int column;
-
-            for (int i = 0; i < key.Length; i++)
+            for (int j = 0; j < matrixColumns; j++)
             {
-                column = lang.findNextLetterPos(key);
+                int column = lang.findNextLetterPos(key);
                 hideLetter(ref key, column);
 
-                for (int j = column; j < plaintext.Length; j += key.Length)
+                for (int i = 0; i < matrixRows; i++)
                 {
-                    if (lang.isValidLetter(plaintext[j]))
-                        ciphertext += plaintext[j];
-                    else
-                        notValidLetters.Add(j);
+                    if (matrix[i, column] != (char)0)
+                    {
+                        if (lang.isValidLetter(matrix[i, column]))
+                            ciphertext += matrix[i, column];
+                    }
                 }
             }
-
-            // Insert not valid letters from plain text to cipher.
-            notValidLetters.Sort();
-            foreach (int i in notValidLetters)
-                ciphertext = ciphertext.Insert(i, Char.ConvertFromUtf32(plaintext[i]));
-
 
             return ciphertext;
         }
@@ -72,7 +67,7 @@ namespace InformationTheoryLabs
             return true;
         }
 
-        private static void createMatrix(string plaintext, string key, Language lang)
+        private static char[,] createMatrix(string plaintext, string key, Language lang)
         {
             char[,] matrix = new char[plaintext.Length, key.Length];
 
@@ -80,7 +75,7 @@ namespace InformationTheoryLabs
             int j = 0;
             int currLetter = 0;
 
-            while (currLetter <= plaintext.Length)
+            while (currLetter < plaintext.Length)
             {
                 int column = lang.findNextLetterPos(key);
                 hideLetter(ref key, column);
@@ -93,6 +88,8 @@ namespace InformationTheoryLabs
 
                 i++;
             }
+
+            return matrix;
 
         }
     }

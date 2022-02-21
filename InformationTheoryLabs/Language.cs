@@ -68,7 +68,7 @@ namespace InformationTheoryLabs
                 pos++;
 
             if (pos >= word.Length)
-                return pos--;
+                return pos-1;
             else
                 return pos;
         }
