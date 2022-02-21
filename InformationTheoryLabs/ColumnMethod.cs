@@ -6,15 +6,12 @@ using System.Threading.Tasks;
 
 namespace InformationTheoryLabs
 {
-    internal class ColumnMethod
+    internal class ColumnMethod:Cipher
     {
-        private string key;
-        private Language language;
-
         public ColumnMethod (string key, Language language)
         {
-            this.key = key;
-            this.language = language;
+            this.Key = key;
+            this.Lang = language;
         }
         /// <summary>
         /// Code plain text uses column method.
@@ -22,22 +19,23 @@ namespace InformationTheoryLabs
         /// <returns>Returns cipher text</returns>
         public string encrypt(string plaintext)
         {
-            if (key == "") key = " ";
+            if (Key == "") Key = " ";
 
             string ciphertext = "";
+            string buffKey = Key;
 
             List<int> notValidLetters = new List<int>();
 
             int column;
 
-            for (int i = 0; i < key.Length; i++)
+            for (int i = 0; i < Key.Length; i++)
             {
-                column = language.findNextLetterPos(key);
-                hideLetter(ref key, column);
+                column = Lang.findNextLetterPos(Key);
+                hideLetter(ref buffKey, column);
 
-                for (int j = column; j < plaintext.Length; j += key.Length)
+                for (int j = column; j < plaintext.Length; j += buffKey.Length)
                 {
-                    if (language.isValidLetter(plaintext[j]))
+                    if (Lang.isValidLetter(plaintext[j]))
                         ciphertext += plaintext[j];
                     else
                         notValidLetters.Add(j);
@@ -68,9 +66,9 @@ namespace InformationTheoryLabs
 
         public bool isValidKey()
         {
-            for (int i = 0; i < key.Length; i++)
+            for (int i = 0; i < Key.Length; i++)
             {
-                if (!language.isValidLetter(key[i]))
+                if (!Lang.isValidLetter(Key[i]))
                     return false;
             }
 

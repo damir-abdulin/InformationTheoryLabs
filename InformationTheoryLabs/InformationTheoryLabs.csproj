@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cipher.cs" />
     <Compile Include="ColumnMethod.cs" />
     <Compile Include="InformationTheory.cs">
       <SubType>Form</SubType>
