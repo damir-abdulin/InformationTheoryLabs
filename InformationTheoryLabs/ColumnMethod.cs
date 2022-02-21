@@ -40,6 +40,8 @@ namespace InformationTheoryLabs
                 }
             }
 
+            ciphertext = insertNotValidLetters(plaintext, ciphertext, lang);
+
             return ciphertext;
         }
 
@@ -80,7 +82,7 @@ namespace InformationTheoryLabs
                 int column = lang.findNextLetterPos(key);
                 hideLetter(ref key, column);
 
-                for (j = 0; j <= column; j++)
+                for (j = 0; j <= column && currLetter < plaintext.Length; j++)
                 {
                     matrix[i, j] = plaintext[currLetter];
                     currLetter++;
@@ -91,6 +93,19 @@ namespace InformationTheoryLabs
 
             return matrix;
 
+        }
+
+        private static string insertNotValidLetters (string plaintext, string ciphertext, Language lang)
+        {
+            if (plaintext.Length == ciphertext.Length) return ciphertext;
+
+            for (int i = 0; i < plaintext.Length; i++)
+            {
+                if (!lang.isValidLetter(plaintext[i]))
+                    ciphertext = ciphertext.Insert(i, Char.ConvertFromUtf32(plaintext[i]));
+            }
+
+            return ciphertext;
         }
     }
 }
