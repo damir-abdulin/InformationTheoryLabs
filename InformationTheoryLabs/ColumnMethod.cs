@@ -6,36 +6,31 @@ using System.Threading.Tasks;
 
 namespace InformationTheoryLabs
 {
-    internal class ColumnMethod:Cipher
+    internal class ColumnMethod
     {
-        public ColumnMethod (string key, Language language)
-        {
-            this.Key = key;
-            this.Lang = language;
-        }
+
         /// <summary>
         /// Code plain text uses column method.
         /// </summary
         /// <returns>Returns cipher text</returns>
-        public string encrypt(string plaintext)
+        public static string encrypt(string plaintext, string key, Language lang)
         {
-            if (Key == "") Key = " ";
+            if (key == "") key = " ";
 
             string ciphertext = "";
-            string buffKey = Key;
 
             List<int> notValidLetters = new List<int>();
 
             int column;
 
-            for (int i = 0; i < Key.Length; i++)
+            for (int i = 0; i < key.Length; i++)
             {
-                column = Lang.findNextLetterPos(Key);
-                hideLetter(ref buffKey, column);
+                column = lang.findNextLetterPos(key);
+                hideLetter(ref key, column);
 
-                for (int j = column; j < plaintext.Length; j += buffKey.Length)
+                for (int j = column; j < plaintext.Length; j += key.Length)
                 {
-                    if (Lang.isValidLetter(plaintext[j]))
+                    if (lang.isValidLetter(plaintext[j]))
                         ciphertext += plaintext[j];
                     else
                         notValidLetters.Add(j);
@@ -57,18 +52,18 @@ namespace InformationTheoryLabs
         /// </summary>
         /// <param name="word">is plain word</param>
         /// <param name="pos">is position hided letter</param>
-        private void hideLetter(ref string word, int pos)
+        private static void hideLetter(ref string word, int pos)
         {
             StringBuilder buff = new System.Text.StringBuilder(word);
             buff[pos] = (char)0;
             word = buff.ToString();
         }
 
-        public bool isValidKey()
+        public static bool isValidKey(string key, Language lang)
         {
-            for (int i = 0; i < Key.Length; i++)
+            for (int i = 0; i < key.Length; i++)
             {
-                if (!Lang.isValidLetter(Key[i]))
+                if (!lang.isValidLetter(key[i]))
                     return false;
             }
 

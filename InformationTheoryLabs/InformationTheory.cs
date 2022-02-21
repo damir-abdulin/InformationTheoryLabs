@@ -10,12 +10,12 @@ namespace InformationTheoryLabs
     public partial class fInformationTheory : Form
     {
         
-        private enum Cipher { ColumnarTransposition, Vigenere, DownsamplingMethod};
         private enum ErrorCode { NoErrors, UnknownLanguage, UnknownAlgorithm, NotValidKey};
 
         // Contains last error.
         private ErrorCode lastError;
 
+        private Cipher cipher;
         private Language currLang; 
         public fInformationTheory()
         {
@@ -23,12 +23,11 @@ namespace InformationTheoryLabs
 
             // Initializes class fields.
             currLang = new Language(Language.Alphabet.English);
+            cipher = new Cipher();
             lastError = ErrorCode.NoErrors;
 
             // Set up combo boxes.
-            string[] cipherEncodeTable = { "Столбцовый метод", "Метод Виженера", "Метод децимации" };
-
-            foreach (string cipher in cipherEncodeTable)
+            foreach (string cipher in cipher.TypeCipherView)
                 cbCipher.Items.Add(cipher);
 
             foreach (string alphabet in currLang.AlphabetView)
@@ -44,44 +43,17 @@ namespace InformationTheoryLabs
             }
 
             currLang.changeAlphabet((Language.Alphabet)cbLanguage.SelectedIndex);
+            cipher.changeCipher((Cipher.TypeCipher)cbCipher.SelectedIndex, tbKey.Text, currLang);
 
-            encrypt((Cipher)cbCipher.SelectedIndex);
-
-            ColumnMethod columnMethod = new ColumnMethod(tbKey.Text.ToUpper(), currLang);
-
-            if  (!columnMethod.isValidKey())
+            if (!cipher.isValidKey())
             {
                 lastError = ErrorCode.NotValidKey;
                 showError();
                 return;
             }
 
-            string ciphertext = columnMethod.encrypt(tbPlaitext.Text);
+            tpCiphertext.Text = cipher.encrypt(tbPlaintext.Text);
 
-        }
-
-        private void encrypt(Cipher cipher)
-        {
-            string ciphertext = "";
-
-            switch (cipher)
-            {
-                case Cipher.ColumnarTransposition:
-                    ColumnMethod columnMethod = new ColumnMethod(tbKey.Text.ToUpper(), currLang);
-
-                    if (!columnMethod.isValidKey())
-                    {
-                        lastError = ErrorCode.NotValidKey;
-                        showError();
-                        return;
-                    }
-
-                    ciphertext = columnMethod.encrypt(tbPlaitext.Text);
-
-                    break;
-            }
-
-            tpCiphertext.Text = ciphertext;
         }
 
         /// <summary>

@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tbPlaitext = new System.Windows.Forms.TextBox();
+            this.tbPlaintext = new System.Windows.Forms.TextBox();
             this.lblPlaintext = new System.Windows.Forms.Label();
             this.lblCiphertext = new System.Windows.Forms.Label();
             this.tpCiphertext = new System.Windows.Forms.TextBox();
@@ -44,15 +44,15 @@
             this.cbLanguage = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
-            // tbPlaitext
+            // tbPlaintext
             // 
-            this.tbPlaitext.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tbPlaitext.Location = new System.Drawing.Point(13, 204);
-            this.tbPlaitext.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tbPlaitext.Multiline = true;
-            this.tbPlaitext.Name = "tbPlaitext";
-            this.tbPlaitext.Size = new System.Drawing.Size(380, 310);
-            this.tbPlaitext.TabIndex = 1;
+            this.tbPlaintext.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tbPlaintext.Location = new System.Drawing.Point(13, 204);
+            this.tbPlaintext.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tbPlaintext.Multiline = true;
+            this.tbPlaintext.Name = "tbPlaintext";
+            this.tbPlaintext.Size = new System.Drawing.Size(380, 310);
+            this.tbPlaintext.TabIndex = 1;
             // 
             // lblPlaintext
             // 
@@ -212,7 +212,7 @@
             this.Controls.Add(this.lblCiphertext);
             this.Controls.Add(this.tpCiphertext);
             this.Controls.Add(this.lblPlaintext);
-            this.Controls.Add(this.tbPlaitext);
+            this.Controls.Add(this.tbPlaintext);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.MaximizeBox = false;
@@ -224,7 +224,7 @@
         }
 
         #endregion
-        private System.Windows.Forms.TextBox tbPlaitext;
+        private System.Windows.Forms.TextBox tbPlaintext;
         private System.Windows.Forms.Label lblPlaintext;
         private System.Windows.Forms.Label lblCiphertext;
         private System.Windows.Forms.TextBox tpCiphertext;
