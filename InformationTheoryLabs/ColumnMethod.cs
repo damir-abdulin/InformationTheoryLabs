@@ -66,6 +66,17 @@ namespace InformationTheoryLabs
             word = buff.ToString();
         }
 
+        public bool isValidKey()
+        {
+            for (int i = 0; i < key.Length; i++)
+            {
+                if (!language.isValidLetter(key[i]))
+                    return false;
+            }
+
+            return true;
+        }
+
         
     }
 }

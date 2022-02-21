@@ -11,7 +11,7 @@ namespace InformationTheoryLabs
     {
         
         private enum Cipher { ColumnarTransposition, Vigenere, DownsamplingMethod};
-        private enum ErrorCode { NoErrors, UnknownLanguage, UnknownAlgorithm};
+        private enum ErrorCode { NoErrors, UnknownLanguage, UnknownAlgorithm, NotValidKey};
 
         // Contains last error.
         private ErrorCode lastError;
@@ -26,7 +26,6 @@ namespace InformationTheoryLabs
             lastError = ErrorCode.NoErrors;
 
             // Set up combo boxes.
-            string[] alphabetEncodeTable = { "Английский", "Русский" };
             string[] cipherEncodeTable = { "Столбцовый метод", "Метод Виженера", "Метод децимации" };
 
             foreach (string cipher in cipherEncodeTable)
@@ -44,14 +43,45 @@ namespace InformationTheoryLabs
                 return;
             }
 
+            currLang.changeAlphabet((Language.Alphabet)cbLanguage.SelectedIndex);
+
+            encrypt((Cipher)cbCipher.SelectedIndex);
 
             ColumnMethod columnMethod = new ColumnMethod(tbKey.Text.ToUpper(), currLang);
 
-            currLang.changeAlphabet((Language.Alphabet)cbLanguage.SelectedIndex);
+            if  (!columnMethod.isValidKey())
+            {
+                lastError = ErrorCode.NotValidKey;
+                showError();
+                return;
+            }
+
             string ciphertext = columnMethod.encrypt(tbPlaitext.Text);
 
-            tpCiphertext.Text = ciphertext;
+        }
 
+        private void encrypt(Cipher cipher)
+        {
+            string ciphertext = "";
+
+            switch (cipher)
+            {
+                case Cipher.ColumnarTransposition:
+                    ColumnMethod columnMethod = new ColumnMethod(tbKey.Text.ToUpper(), currLang);
+
+                    if (!columnMethod.isValidKey())
+                    {
+                        lastError = ErrorCode.NotValidKey;
+                        showError();
+                        return;
+                    }
+
+                    ciphertext = columnMethod.encrypt(tbPlaitext.Text);
+
+                    break;
+            }
+
+            tpCiphertext.Text = ciphertext;
         }
 
         /// <summary>
@@ -73,6 +103,10 @@ namespace InformationTheoryLabs
 
                 case ErrorCode.UnknownAlgorithm:
                     stringError = "Выберете алгоритм шифрования";
+                    break;
+
+                case ErrorCode.NotValidKey:
+                    stringError = "Ключ содержит недопустимые значения";
                     break;
             }
 
@@ -96,8 +130,7 @@ namespace InformationTheoryLabs
             {
                 lastError = ErrorCode.UnknownAlgorithm;
                 return false;
-            }
-            
+            }            
 
             return true;
         }
